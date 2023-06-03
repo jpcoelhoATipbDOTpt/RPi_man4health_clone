@@ -5,7 +5,7 @@ Created on Fri Sep 30 12:43:58 2022
 
 @author: jpcoelho
 """
-
+import sys
 import minimalmodbus
 import paho.mqtt.client as mqttclient
 import time
@@ -21,8 +21,9 @@ def on_connect(client, usedata,flags,rc):
         
 # Configuração MQTT
 connected = False
+broker_address = sys.argv[1]
 # broker_address = "192.168.1.68"
-broker_address = "193.136.195.25"
+# broker_address = "193.136.195.25"
 port = 1883
 # user="man4health"
 # password="#Man4Health"
