@@ -1,5 +1,9 @@
 #! /usr/bin/python3
-
+"""
+Modificado em 03/Junho 2023
+@by: jpcoelho
+"""
+import sys
 import paho.mqtt.client as mqttclient
 import time
 import json
@@ -25,8 +29,9 @@ def on_connect(client, usedata,flags,rc):
         print("Falha de ligação do cliente")
         
 # Configuración MQTT
+broker_address = sys.argv[1]
 connected = False
-broker_address = "193.136.195.25"
+# broker_address = "193.136.195.25"
 port = 1883
 client = mqttclient.Client("MQTT")
 client.on_connect = on_connect
