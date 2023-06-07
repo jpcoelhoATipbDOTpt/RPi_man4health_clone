@@ -163,6 +163,9 @@ except:
     minimumBatteryVoltageToday = -1
     consumedEnergyToday = -1
     consumedEnergyMonth = -1
+    consumedEnergyYear = -1
+    totalConsumedEnergy = -1
+    generatedEnergyToday = -1
     generatedEnergyMonth = -1
     generatedEnergyYear = -1
     totalGeneratedEnergy = -1
@@ -213,4 +216,3 @@ try:
     client.loop_stop()
 except:
     print("Impossível conetar ao broker MQTT ")
-    
