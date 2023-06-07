@@ -32,10 +32,11 @@ client = mqttclient.Client("MQTT")
 client.on_connect = on_connect
 
 ## Tópico MQTT
-apikey = "Meteo"
-deviceid = "SenseCAP01"
+maintopic = "man4health"
+apikey = "meteo"
+deviceid = "sensecapdev1"
 protocol = "json"
-topic = "/" + protocol +"/" + apikey + "/" + deviceid + "/attrs"
+topic = "/" + maintopic + "/" + protocol + "/" + apikey + "/" + deviceid + "/attrs"
 
 # Configuração Modbus
 PORT='/dev/SenseCAPdongle'
