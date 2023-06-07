@@ -1,3 +1,11 @@
+#! /usr/bin/python3
+
+"""
+Modificado em 03/Junho 2023
+
+@author: jpcoelho
+"""
+import sys
 import serial
 import json
 import paho.mqtt.client as mqttclient
