@@ -1,10 +1,11 @@
 #! /usr/bin/python3
 
 """
-16/outubro/2022
+Modificado em 03/Junho 2023
+
 @author: jpcoelho
 """
-
+import sys
 import minimalmodbus
 import paho.mqtt.client as mqttclient
 import time
@@ -12,18 +13,17 @@ import json
 
 def on_connect(client, usedata,flags,rc):
     if rc==0:
-        print("Client ligado")
+        print("Cliente ligado")
         global connected
         connected=True
     else:
         print("Falha de ligação do cliente")
-
+        
 # Configuração MQTT
 connected = False
+broker_address = sys.argv[1]
 # broker_address = "192.168.1.68"
-broker_address = "193.136.195.25" # Servidor IPB
-# broker_address = "mrmaldoror.hopto.org"
-# broker_address = "localhost"
+# broker_address = "193.136.195.25"
 port = 1883
 # user="man4health"
 # password="#Man4Health"
@@ -68,91 +68,106 @@ BAT_MEAS_VOLT_REG = 0x331A
 BAT_MEAS_CURT_REG = 0x331B # L + H 
 
 SLAVE_ADDRESS = 1
-
-# Configura instrumento
-instrument = minimalmodbus.Instrument(PORT,SLAVE_ADDRESS,mode=minimalmodbus.MODE_RTU)
-
-# Parametros do instrumento
-instrument.serial.baudrate = 115200        # Baud
-instrument.serial.bytesize = 8
-instrument.serial.parity   = minimalmodbus.serial.PARITY_NONE
-instrument.serial.stopbits = 1
-instrument.serial.timeout  = 0.5          # seconds
-# print(instrument)
-
-# Fecha porto
-instrument.close_port_after_each_call = True
-instrument.clear_buffers_before_each_transaction = True
-
-# PV array input voltage
-PVarrayInputVoltage = instrument.read_register(PV_IN_VOLTAGE_REG,2,4,True)
-# PV array input current
-PVarrayInputCurrent = instrument.read_register(PV_IN_CURRENT_REG,2,4,True)
-# PV array input power
-MSW = instrument.read_long(PV_IN_POWER_REG,4,True,3)
-PVarrayInputPower= (MSW*0.01)
-# Load voltage
-loadVoltage = instrument.read_register(LOAD_VOLTAGE_REG,2,4,True)
-# Load current
-loadCurrent = instrument.read_register(LOAD_CURRENT_REG,2,4,True)
-# Load power
-MSW = instrument.read_long(LOAD_POWER_REG,4,True,3)
-loadPower= (MSW*0.01)
-# Battery temperature
-batteryTemperature = instrument.read_register(BAT_TEMP_REG,2,4,True)
-# Device temperature
-deviceTemperature = instrument.read_register(DEV_TEMP_REG,2,4,True)
-# Battery SOC
-batterySOC = instrument.read_register(BAT_CAPACITY_REG,2,4,True)
-# Battery's real rated voltage
-batteryRealRatedVoltage = instrument.read_register(BAT_REAL_VOLT_REG,2,4,True)
-# Battery status
-batteryStatus = instrument.read_register(BAT_STATUS_REG,2,4,True)
-# Charging equipment status
-chargingEquipmentStatus = instrument.read_register(CHARG_STATUS_REG,2,4,True)
-# Discharging equipment status
-dischargingEquipmentStatus = instrument.read_register(DCHARG_STATUS_REG,2,4,True)
-# Maximum battery voltage today
-maximumBatteryVoltageToday = instrument.read_register(MAX_BAT_V_DAY_REG,2,4,True)
-# Minimum battery voltage today
-minimumBatteryVoltageToday = instrument.read_register(MIN_BAT_V_DAY_REG,2,4,True)
-# Consumed energy today
-MSW = instrument.read_long(EGY_COSMD_DAY_REG,4,True,3)
-consumedEnergyToday= (MSW*0.01)
-# Consumed energy today
-MSW = instrument.read_long(EGY_COSMD_DAY_REG,4,True,3)
-consumedEnergyToday= (MSW*0.01)
-# Consumed energy this month
-MSW = instrument.read_long(EGY_COSMD_MTH_REG,4,True,3)
-consumedEnergyMonth= (MSW*0.01)
-# Consumed energy this year
-MSW = instrument.read_long(EGY_COSMD_YAR_REG,4,True,3)
-consumedEnergyYear= (MSW*0.01)
-# Total consumed energy
-MSW = instrument.read_long(EGY_COSMD_TOT_REG,4,True,3)
-totalConsumedEnergy = MSW
-# Generated energy today
-MSW = instrument.read_long(EGY_GENTD_DAY_REG,4,True,3)
-generatedEnergyToday= (MSW*0.01)
-# Generated energy this month
-MSW = instrument.read_long(EGY_GENTD_MTH_REG,4,True,3)
-generatedEnergyMonth= (MSW*0.01)
-# Generated energy this year
-MSW = instrument.read_long(EGY_GENTD_YAR_REG,4,True,3)
-generatedEnergyYear= (MSW*0.01)
-# Total generated energy
-MSW = instrument.read_long(EGY_GENTD_TOT_REG,4,True,3)
-totalGeneratedEnergy= (MSW*0.01)
-# Battery voltage
-batteryVoltage = instrument.read_register(BAT_MEAS_VOLT_REG,2,4,True)
-# Battery current
-MSW = instrument.read_long(BAT_MEAS_CURT_REG,4,True,3)
-batteryCurrent= (MSW*0.01)
-
-# Mostra valores (debug apenas) 
-print('The Device Temperature is: %.1f ºC\r' % deviceTemperature)
-print('The Battery Voltage is: %.1f V\r' % batteryVoltage)
-
+try:
+    # Configura instrumento
+    instrument = minimalmodbus.Instrument(PORT,SLAVE_ADDRESS,mode=minimalmodbus.MODE_RTU)
+    # Parametros do instrumento
+    instrument.serial.baudrate = 115200        # Baud
+    instrument.serial.bytesize = 8
+    instrument.serial.parity   = minimalmodbus.serial.PARITY_NONE
+    instrument.serial.stopbits = 1
+    instrument.serial.timeout  = 0.5          # seconds
+    # Fecha porto
+    instrument.close_port_after_each_call = True
+    instrument.clear_buffers_before_each_transaction = True
+    # PV array input voltage
+    PVarrayInputVoltage = instrument.read_register(PV_IN_VOLTAGE_REG,2,4,True)
+    # PV array input current
+    PVarrayInputCurrent = instrument.read_register(PV_IN_CURRENT_REG,2,4,True)
+    # PV array input power
+    MSW = instrument.read_long(PV_IN_POWER_REG,4,True,3)
+    PVarrayInputPower= (MSW*0.01)
+    # Load voltage
+    loadVoltage = instrument.read_register(LOAD_VOLTAGE_REG,2,4,True)
+    # Load current
+    loadCurrent = instrument.read_register(LOAD_CURRENT_REG,2,4,True)
+    # Load power
+    MSW = instrument.read_long(LOAD_POWER_REG,4,True,3)
+    loadPower= (MSW*0.01)
+    # Battery temperature
+    batteryTemperature = instrument.read_register(BAT_TEMP_REG,2,4,True)
+    # Device temperature
+    deviceTemperature = instrument.read_register(DEV_TEMP_REG,2,4,True)
+    # Battery SOC
+    batterySOC = instrument.read_register(BAT_CAPACITY_REG,2,4,True)
+    # Battery's real rated voltage
+    batteryRealRatedVoltage = instrument.read_register(BAT_REAL_VOLT_REG,2,4,True)
+    # Battery status
+    batteryStatus = instrument.read_register(BAT_STATUS_REG,2,4,True)
+    # Charging equipment status
+    chargingEquipmentStatus = instrument.read_register(CHARG_STATUS_REG,2,4,True)
+    # Discharging equipment status
+    dischargingEquipmentStatus = instrument.read_register(DCHARG_STATUS_REG,2,4,True)
+    # Maximum battery voltage today
+    maximumBatteryVoltageToday = instrument.read_register(MAX_BAT_V_DAY_REG,2,4,True)
+    # Minimum battery voltage today
+    minimumBatteryVoltageToday = instrument.read_register(MIN_BAT_V_DAY_REG,2,4,True)
+    # Consumed energy today
+    MSW = instrument.read_long(EGY_COSMD_DAY_REG,4,True,3)
+    consumedEnergyToday= (MSW*0.01)
+    # Consumed energy today
+    MSW = instrument.read_long(EGY_COSMD_DAY_REG,4,True,3)
+    consumedEnergyToday= (MSW*0.01)
+    # Consumed energy this month
+    MSW = instrument.read_long(EGY_COSMD_MTH_REG,4,True,3)
+    consumedEnergyMonth= (MSW*0.01)
+    # Consumed energy this year
+    MSW = instrument.read_long(EGY_COSMD_YAR_REG,4,True,3)
+    consumedEnergyYear= (MSW*0.01)
+    # Total consumed energy
+    MSW = instrument.read_long(EGY_COSMD_TOT_REG,4,True,3)
+    totalConsumedEnergy = MSW
+    # Generated energy today
+    MSW = instrument.read_long(EGY_GENTD_DAY_REG,4,True,3)
+    generatedEnergyToday= (MSW*0.01)
+    # Generated energy this month
+    MSW = instrument.read_long(EGY_GENTD_MTH_REG,4,True,3)
+    generatedEnergyMonth= (MSW*0.01)
+    # Generated energy this year
+    MSW = instrument.read_long(EGY_GENTD_YAR_REG,4,True,3)
+    generatedEnergyYear= (MSW*0.01)
+    # Total generated energy
+    MSW = instrument.read_long(EGY_GENTD_TOT_REG,4,True,3)
+    totalGeneratedEnergy= (MSW*0.01)
+    # Battery voltage
+    batteryVoltage = instrument.read_register(BAT_MEAS_VOLT_REG,2,4,True)
+    # Battery current
+    MSW = instrument.read_long(BAT_MEAS_CURT_REG,4,True,3)
+    batteryCurrent= (MSW*0.01)
+except:
+    PVarrayInputVoltage = -1
+    PVarrayInputCurrent = -1
+    PVarrayInputPower = -1
+    loadVoltage = -1
+    loadCurrent = -1
+    loadPower = -1
+    batteryTemperature = -1
+    deviceTemperature = -1
+    batterySOC = -1
+    batteryRealRatedVoltage = -1
+    batteryStatus = -1
+    chargingEquipmentStatus = -1
+    dischargingEquipmentStatus = -1
+    maximumBatteryVoltageToday = -1
+    minimumBatteryVoltageToday = -1
+    consumedEnergyToday = -1
+    consumedEnergyMonth = -1
+    generatedEnergyMonth = -1
+    generatedEnergyYear = -1
+    totalGeneratedEnergy = -1
+    batteryVoltage = -1
+    batteryCurrent = -1
+    
 # Criar payload json
 
 payload = { "A3": PVarrayInputVoltage,
@@ -183,8 +198,6 @@ payload = { "A3": PVarrayInputVoltage,
            }
 
 message = json.dumps(payload)
-
-print(message)
 
 # Publicar dados no broker
 try:
