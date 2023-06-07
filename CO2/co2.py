@@ -58,7 +58,7 @@ try:
     instrument.clear_buffers_before_each_transaction = True
     dados = instrument.read_registers(REGISTER,3,3)
 except:
-    dados = [0,0,0]
+    dados = [-1,-1,-1]
     
 # Mostra valores (debug apenas) 
 # print(*dados, sep=",")
