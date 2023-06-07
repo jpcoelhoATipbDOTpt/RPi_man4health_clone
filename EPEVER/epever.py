@@ -32,10 +32,11 @@ client = mqttclient.Client("MQTT")
 client.on_connect = on_connect
 
 ## Tópico MQTT
-apikey = "Epever"
-deviceid = "TracerA1210AL01"
+maintopic = "man4health"
+apikey = "energia"
+deviceid = "epeverdev1"
 protocol = "json"
-topic = "/" + protocol +"/" + apikey + "/" + deviceid + "/attrs"
+topic = "/" + maintopic + "/" + protocol + "/" + apikey + "/" + deviceid + "/attrs"
         
 # Configuração Modbus
 PORT='/dev/EPEVERdongle'
