@@ -32,13 +32,14 @@ client = mqttclient.Client("MQTT")
 client.on_connect = on_connect
 
 ## Tópico MQTT
-apikey = "Meteo"
-deviceid = "TESTE"
+maintopic = "man4health"
+apikey = "teste"
+deviceid = "testedev1"
 protocol = "json"
 topic = "/" + protocol +"/" + apikey + "/" + deviceid + "/attrs"
 
 payload = {
-  "T1": 1,
+  "T1": 1.0,
   "T2": "OK"
 }
 
