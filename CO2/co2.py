@@ -32,10 +32,11 @@ client = mqttclient.Client("MQTT")
 client.on_connect = on_connect
 
 ## Tópico MQTT
+maintopic = "man4health"
 apikey = "Meteo"
 deviceid = "CO2DEV01"
 protocol = "json"
-topic = "/" + protocol +"/" + apikey + "/" + deviceid + "/attrs"
+topic = "/" + maintopic + "/" + protocol +"/" + apikey + "/" + deviceid + "/attrs"
 
 # Configuração Modbus
 PORT='/dev/RS485dongle'
