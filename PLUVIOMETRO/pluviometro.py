@@ -34,7 +34,7 @@ client.on_connect = on_connect
 ## Tópico MQTT
 maintopic = "man4health"
 apikey = "meteo"
-deviceid = "pluvio"
+deviceid = "pluviodev1"
 protocol = "json"
 topic = "/" + maintopic + "/" + protocol + "/" + apikey + "/" + deviceid + "/attrs"
 #.............................................................................................
