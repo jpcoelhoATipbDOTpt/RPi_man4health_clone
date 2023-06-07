@@ -40,25 +40,22 @@ topic = "/" + protocol +"/" + apikey + "/" + deviceid + "/attrs"
 # Configuração Modbus
 PORT='/dev/RS485dongle'
 REGISTER = 8
-
 SLAVE_ADDRESS = 69
-
-# Configura instrumento
-instrument = minimalmodbus.Instrument(PORT,SLAVE_ADDRESS,mode=minimalmodbus.MODE_RTU)
-
-# Parametros do instrumento
-instrument.serial.baudrate = 9600        # Baud
-instrument.serial.bytesize = 8
-instrument.serial.parity   = minimalmodbus.serial.PARITY_NONE
-instrument.serial.stopbits = 1
-instrument.serial.timeout  = 1          # seconds
-instrument.precalculate_read_size= False
-# Fecha porto
-instrument.close_port_after_each_call = True
-instrument.clear_buffers_before_each_transaction = True
 
 # Le dados
 try:
+    # Configura instrumento
+    instrument = minimalmodbus.Instrument(PORT,SLAVE_ADDRESS,mode=minimalmodbus.MODE_RTU)
+    # Parametros do instrumento
+    instrument.serial.baudrate = 9600        # Baud
+    instrument.serial.bytesize = 8
+    instrument.serial.parity   = minimalmodbus.serial.PARITY_NONE
+    instrument.serial.stopbits = 1
+    instrument.serial.timeout  = 1          # seconds
+    instrument.precalculate_read_size= False
+    # Fecha porto
+    instrument.close_port_after_each_call = True
+    instrument.clear_buffers_before_each_transaction = True
     dados = instrument.read_registers(REGISTER,3,3)
 except:
     dados = [0,0,0]
