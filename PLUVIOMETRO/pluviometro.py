@@ -33,7 +33,7 @@ client = mqttclient.Client("MQTT")
 client.on_connect = on_connect
 ## Tópico MQTT
 apikey = "Meteo"
-deviceid = "CO2DEV01"
+deviceid = "PLUVIO"
 protocol = "json"
 topic = "/" + protocol +"/" + apikey + "/" + deviceid + "/attrs"
 #.............................................................................................
