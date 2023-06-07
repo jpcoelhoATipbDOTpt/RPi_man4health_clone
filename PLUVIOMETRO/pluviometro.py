@@ -32,10 +32,11 @@ client = mqttclient.Client("MQTT")
 #client.username_pw_set(user,password=password)
 client.on_connect = on_connect
 ## Tópico MQTT
-apikey = "Meteo"
-deviceid = "PLUVIO"
+maintopic = "man4health"
+apikey = "meteo"
+deviceid = "pluvio"
 protocol = "json"
-topic = "/" + protocol +"/" + apikey + "/" + deviceid + "/attrs"
+topic = "/" + maintopic + "/" + protocol + "/" + apikey + "/" + deviceid + "/attrs"
 #.............................................................................................
 class DadosInvalidos(Exception):
     pass
